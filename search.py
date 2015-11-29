@@ -29,7 +29,7 @@ def query_first(start, end, keywords, pagenumber):
             }
     url="http://www.sgs.gov.cn/shaic/punish!getList.action"
 
-    print "--Issue a request--"
+    print "--Issue a request with " + keywords + "," + start + "-" +end + " page: " + str(pagenumber) + "--"
     content = requests.post(url, data=data).text
         
     #print content
@@ -192,12 +192,13 @@ def searchMain(argv):
     case_list = []
 
     datelist = mydate.query_dates(startDate, endDate)
-    pagenumber = 0
+    pagenumber = 1
 
     for datepair in datelist: 
         totalpage = 1
         begindate = datepair[0]
         finishdate = datepair[1]
+        print "-- query from " + begindate + " to " +finishdate
 
         while True:
             content = query_first(begindate, finishdate, keyword, pagenumber)

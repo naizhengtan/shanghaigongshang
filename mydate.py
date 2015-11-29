@@ -34,3 +34,4 @@ def query_dates(start, end):
 
     return retarr
 
+print query_dates('2015-10-1', '2015-10-30')
