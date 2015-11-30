@@ -1,2 +1,2 @@
 #!/bin/bash
-./code.py > run.log 
+./code.py > run.log &

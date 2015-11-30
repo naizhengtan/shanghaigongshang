@@ -7,10 +7,12 @@
 # 3. detail [DONE]
 # 4. write csv [DONE]
 # 5. web site [DONE]
-# 6. 
+# 6. download doc
 
 import requests, sys, string, re
 import mydate
+import csv
+from subprocess import call
 
 # global variable
 table_starter = "<table width=\"0%\" border=\"0\" cellspacing=\"1\" cellpadding=\"0\">"
@@ -60,6 +62,11 @@ def scoope(content, starter, end):
     end_pos = string.find(content, end)
     info = content[:end_pos]
     return string.strip(info)
+
+def download_doc(name, doc_link):
+    filename = 'download/'+name
+    print "-- download file: " + filename + " from " + doc_link
+    call(['wget', '-O', filename, doc_link]) 
 
 # an example
 #<tr>
@@ -115,6 +122,7 @@ def pickInfoFromToken(token) :
     break_type = ""
     punish_content = ""
     doc_link = ""
+    register_id = ""
     elements = string.split(more_info, "</tr>")
     for element in elements:
         key = scoope(element, "<th colspan=\"3\">", "</th>")
@@ -123,6 +131,9 @@ def pickInfoFromToken(token) :
         if key.encode('utf8') == "违法行为类型":
             break_type = value
             #print break_type
+        elif key.encode('utf-8') == "注册号":
+            register_id = value
+            #print punish_content
         elif key.encode('utf-8') == "行政处罚内容":
             punish_content = value
             #print punish_content
@@ -131,7 +142,10 @@ def pickInfoFromToken(token) :
             doc_link = scoope(value, "<a href=\"http://", "\"")
             #print doc_link 
 
-    return [name, date, break_type, punish_content, doc_link, link]
+    # download
+    download_doc(register_id+'.doc', doc_link)
+
+    return [name, date, register_id, break_type, punish_content, doc_link, link]
 
 
 def parseHtml(html):
@@ -212,17 +226,18 @@ def searchMain(argv):
                 break
 
         # orgnize the cases
-        lines = list()
-        for case in case_list:
-            #map(replaceNewline, case)
-            line = '","'.join(case)
-            line = '"%s"' % line
-            lines.append(line)
+        #lines = list()
+        #for case in case_list:
+        #    #map(replaceNewline, case)
+        #    line = '","'.join(case)
+        #    line = '"%s"' % line
+        #    lines.append(line)
 
     # write as csv
     with open('doc.csv', 'wb') as output_file:
-        for line in lines:
-            output_file.write(line.encode('utf-8'))
+        csv_out = csv.writer(output_file)
+        for case in case_list:
+            csv_out.writerow(case)
 
     global countentry
     return "DONE. Fetching " + str(countentry) + " entries from " + str(countpage) + " pages"

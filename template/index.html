@@ -11,5 +11,28 @@ $def with (form)
 $:form.render()
 <input type="submit" value="search" />
 </form>
+
+<p>
+Example:<br>
+keyword: hello <br>
+Start Date: 2015-10-1 <br>
+End Date: 2015-10-30 <br>
+<br>
+Note: 
+"keyword" can be empty which give you all the results.<br>
+Be careful with the date. There is not much checking in my code.<br>
+Do not frequently refresh and resubmit form. Check log (see HOWTO (2)) first.<br>
+</p>
+
+<p>
+How to use:<br>
+(1) Enter "keyword", "start", "end"<br>
+(2) You can go to "yak.csres.co:8080/log" (use a new tab) to check the current process (the encoding is UTF-8)<br>
+(3) After finish, you will see message like "DONE. Fetching 660 entries from 22 pages" on current page (yak.csres.co:8080)<br>
+(4) Download the csv file. Go to "yak.csres.co:8080/result". This will give a csv file(still encoding
+is UTF-8) and import into Execl.<br>
+(5) Download the "pan-jue-shu" as tar ball. Go to "yak.csres.co:8080/download", and see "OK".<br>
+</p>
+
 </body>
 </html>
